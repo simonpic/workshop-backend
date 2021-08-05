@@ -1,0 +1,65 @@
+version: "3.9"
+services:
+  workshop-ui:
+   container_name: workshop-ui
+   image: workshop-ui:latest
+   build:
+     context: workshop-ui
+   ports:
+     - 9000:8080
+   depends_on: 
+     - workshop-api
+   networks:
+     - public-network
+  workshop-api:
+    container_name: workshop-api
+    image: workshop-api:latest
+    build:
+      context: api
+    ports:
+      - 9001:8080
+    depends_on: 
+      - user-service
+      - ticket-service
+    networks:
+      - public-network
+      - private-network
+  user-service:
+    container_name: user-service
+    image: user-service:latest
+    build:
+      context: userservice
+    expose:
+      - 8080
+    networks:
+      - private-network
+  ticket-service:
+    container_name: ticket-service
+    image: ticket-service:latest
+    build:
+      context: ticketservice
+    expose:
+      - 8080
+    networks:
+      - private-network
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:14.0.0
+    ports:
+      - 9010:8080
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_IMPORT: workshop-realm.json
+    volumes: 
+      - ./workshop-realm.json:workshop-realm.json
+    networks: 
+      - public-network
+      - private-network
+
+              
+networks:
+  public-network:
+    internal: false
+  private-network:
+    internal: true

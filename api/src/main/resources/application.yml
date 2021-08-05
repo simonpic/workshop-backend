@@ -1,0 +1,8 @@
+server:
+  servlet:
+    context-path: /api
+keycloak:
+  realm: workshop
+  client-id: workshop-api
+  username: admin
+  password: admin

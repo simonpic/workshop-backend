@@ -1,0 +1,9 @@
+front:
+  origin: http://localhost:9000
+keycloak:
+  server-url: htt://localhost:9010/auth
+clients:
+  ticket-service:
+    base-url: http://ticket-service:8080
+  user-service:
+    base-url: http://user-service:8080

@@ -1,0 +1,170 @@
+openapi: 3.0.1
+info:
+  title: workshop-api
+  version: '1'
+servers:
+  - url: http://localhost:9000/api
+paths:
+  /users:
+    get:
+      summary: Get all users
+      tags:
+        - Users
+      responses:
+        200:
+          description: Returns the list of all the application users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+    post:
+      summary: Create a new user
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserForm'
+      responses:
+        201:
+          description: Returns the created user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /users/{id}:
+    get:
+      summary: Get a user by his id
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Id of the user to get
+      responses:
+        200:
+          description: Returns the user having the id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        404:
+          description: There is no user for the given id
+  /tickets:
+    get:
+      summary: Get all user ticket's
+      tags:
+        - Tickets
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: Id of the ticket's author
+      responses:
+        200:
+          description: Returns the list of all user's ticket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tickets'
+    post:
+      summary: Create a new ticket
+      tags:
+        - Tickets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketForm'
+      responses:
+        201:
+          description: Returns the create ticket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ticket'
+components:
+  schemas:
+    Users:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+      required:
+        - users
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        pseudo:
+          type: string
+    UserForm:
+      type: object
+      properties:
+        email:
+          type: string
+        pseudo:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - pseudo
+        - password
+    Tickets:
+      type: object
+      properties:
+        tickets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ticket'
+      required:
+        - tickets
+    Ticket:
+      type: object
+      properties:
+        label:
+          type: string
+        author:
+          $ref: '#/components/schemas/User'
+        assignee:
+          $ref: '#/components/schemas/User'
+        text:
+          type: string
+        status:
+          type: string
+          enum: [New, InProgress, Done]
+      required:
+        - label
+        - auteur
+        - assignee
+        - description
+        - status
+    TicketForm:
+      type: object
+      properties:
+        label:
+          type: string
+        description:
+          type: string
+        authorId:
+          type: string
+        status:
+          type: string
+          enum: [New, InProgress, Done]
+        assigneeId:
+          type: string
+      required:
+        - label
+        - status

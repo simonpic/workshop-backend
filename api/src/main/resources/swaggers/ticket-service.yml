@@ -1,0 +1,74 @@
+openapi: 3.0.1
+info:
+  title: ticket-service
+  version: '1'
+servers:
+  - url: http://localhost:8081
+paths:
+  /tickets:
+    get:
+      summary: Get a list of tickets matching the query parameters
+      tags:
+        - Tickets
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: Id of the ticket's author
+      responses:
+        200:
+          description: Returns a list of tickets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tickets'
+    post:
+      summary: Create a new ticket
+      tags:
+        - Tickets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ticket'
+      responses:
+        201:
+          description: Returns the create ticket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ticket'
+components:
+  schemas:
+    Tickets:
+      type: object
+      properties:
+        tickets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ticket'
+      required:
+        - tickets
+    Ticket:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        authorId:
+          type: string
+        assigneeId:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+      required:
+        - label
+        - authorId
+        - assigneeId
+        - text
+        - status

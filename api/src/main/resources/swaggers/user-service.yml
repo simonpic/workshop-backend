@@ -1,0 +1,50 @@
+openapi: 3.0.1
+info:
+  title: user-service
+  version: '1'
+servers:
+  - url: http://localhost:8082/users
+paths:
+  /:
+    get:
+      summary: Get all users
+      tags:
+        - Users
+      responses:
+        200:
+          description: Returns the list of all the application users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+    post:
+      summary: Create a new user
+      tags:
+        - Users
+      responses:
+        201:
+          description: Returns the created user with his id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+components:
+  schemas:
+    Users:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+      required:
+        - users
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        pseudo:
+          type: string
